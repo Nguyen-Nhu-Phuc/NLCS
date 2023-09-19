@@ -24,18 +24,19 @@
                                     →
                                 </span>
                             </router-link>
-                            
+
                         </a>
 
 
                         <a class="actions" href="#">
-                            <button class="button__delete">
+                            <button type="button" @click="deleteCourse(course._id)" class="button__delete">
                                 Xóa
                             </button>
-                            
+
+
                         </a>
 
-                        
+
                     </div>
                 </div>
 
@@ -96,6 +97,14 @@ export default {
                 console.log(this.courses);
             } catch (error) {
                 console.error('Error get data from MongoDB:', error);
+            }
+        },
+
+        async deleteCourse(id) {
+            const res = await axios.delete(`http://localhost:3000/api/course/${id}`);
+            if (res.status == 200) {
+                await this.fetchCourses();
+                this.$router.push('/course');
             }
         },
     },
@@ -275,6 +284,8 @@ hr {
     transition-duration: .3s;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
     background: #4bb6b7;
+    margin-top: 129px;
+    margin-left: 116px;
 }
 
 /* plus sign */
@@ -319,7 +330,4 @@ hr {
     transition-duration: .3s;
     padding-right: 15px;
 }
-
-
-
 </style>

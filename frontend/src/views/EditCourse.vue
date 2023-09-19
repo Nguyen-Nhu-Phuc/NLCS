@@ -61,6 +61,7 @@ export default {
     },
 
     methods: {
+        
         async EditCourse() {
             await axios.put(`http://localhost:3000/api/course/editcourse`, this.editCourse)
                 .then((res) => {
@@ -73,7 +74,6 @@ export default {
                     console.log(err);
                 })
         },
-
         async assignValues() {
             const id = this.$route.params.id
             const res = await axios.get(`http://localhost:3000/api/course/${id}`);

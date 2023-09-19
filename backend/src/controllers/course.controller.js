@@ -27,9 +27,8 @@ const CourseController = {
 
     // [DELETE] /api/course/:id
     deleteCourse: async(req, res) => {
-        const {id} = req.body;
         try {
-            const course = await Course.findByIdAndDelete(id);
+            const course = await Course.findByIdAndDelete(req.params.id);
             res.status(200).json(course);
         }catch(err) {
             res.status(500).json(err);
