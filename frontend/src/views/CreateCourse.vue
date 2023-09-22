@@ -1,15 +1,17 @@
 <template>
-    <form @submit.prevent="CreateCourse()" method="post">
+    <form @submit.prevent="createCourse" method="post">
         <div class="container" id="container">
             <div class="modal">
                 <div class="modal__header">
-                    <span class="modal__title">New course</span><button class="button button--icon"><svg width="24"
-                            viewBox="0 0 24 24" height="24" xmlns="http://www.w3.org/2000/svg">
+                    <span class="modal__title">New course</span>
+                    <button class="button button--icon" @click="closeModal">
+                        <svg width="24" viewBox="0 0 24 24" height="24" xmlns="http://www.w3.org/2000/svg">
                             <path fill="none" d="M0 0h24v24H0V0z"></path>
                             <path
                                 d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z">
                             </path>
-                        </svg></button>
+                        </svg>
+                    </button>
                 </div>
                 <div class="modal__body">
                     <div class="input">
@@ -19,14 +21,15 @@
                     </div>
                     <div class="input">
                         <label class="input__label">Description</label>
-                        <textarea class="input__field input__field--textarea" id="description" v-model="newCourse.description"></textarea>
-                        <p class="input__description">Give your project a good description so everyone know what's it for
+                        <textarea class="input__field input__field--textarea" id="description"
+                            v-model="newCourse.description"></textarea>
+                        <p class="input__description">Give your project a good description so everyone knows what it's for
                         </p>
                     </div>
                     <div class="input">
                         <label class="input__label">Course image</label>
-                        <input class="input__field" type="text" id="image" v-model="newCourse.image">
-                        <p class="input__description">The title must contain a maximum of 32 characters</p>
+                        <input class="input__field" type="file" id="image" ref="imageInput" @change="handleImageUpload">
+                        <p class="input__description">Upload an image file (maximum 32 characters)</p>
                     </div>
                 </div>
                 <div class="modal__footer">
@@ -36,45 +39,86 @@
         </div>
     </form>
 </template>
+  
 <script>
 import axios from 'axios';
-import {useUserStore} from '../stores/user.js';
+import { useUserStore } from '../stores/user.js';
 
 export default {
     setup() {
         const userStore = useUserStore();
-        return {
-            userStore
-        }
-    },
 
-    data() {
-        return {
-            newCourse: {
-                name: '',
-                description:'',
-                image: '',
+        const newCourse = {
+            name: '',
+            description: '',
+            image: '', // Thêm trường image
+        };
+
+        const closeModal = () => {
+            // Đặt lại các trường trong newCourse và đóng modal
+            newCourse.name = '';
+            newCourse.description = '';
+            newCourse.image = '';
+        };
+
+        const handleImageUpload = async (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const CLOUD_NAME = "dhquufqkd";
+                const PRESET_NAME = "backgraud_image_courese";
+                const FOLDER_NAME = "ECMA";
+                const api = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
+
+                const formData = new FormData();
+                formData.append("upload_preset", PRESET_NAME);
+                formData.append("folder", FOLDER_NAME);
+                formData.append("file", file);
+
+                try {
+                    const response = await axios.post(api, formData, {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        },
+                    });
+                    newCourse.image = response.data.secure_url;
+                    console.log(response.data); // Kiểm tra kết quả từ Cloudinary
+                } catch (error) {
+                    console.error("Lỗi khi tải lên hình ảnh:", error);
+                }
+
             }
-        }
-    },
+        };
 
-    methods: {
-        async CreateCourse() {
-            await axios.post(`http://localhost:3000/api/course/createcourse`, this.newCourse)
-                .then(() => {
-                    this.newCourse = ''
-                })
-                .catch(err => {
-                    console.log(err);
-                })
-        },
-    },
+        const createCourse = async () => {
+            try {
+                // Kiểm tra xem có trường name và description không trống
+                if (!newCourse.name || !newCourse.description) {
+                    alert("Please fill in all required fields.");
+                    return;
+                }
 
-    // async created() {
-    //     console.log(this.userStore.account);
-    // }
-}
+                await axios.post(`http://localhost:3000/api/course/createcourse`, newCourse);
+                closeModal();
+                alert("Course created successfully!");
+            } catch (err) {
+                console.error(err);
+                alert("An error occurred while creating the course. Please try again later.");
+            }
+        };
+
+        return {
+            userStore,
+            newCourse,
+            closeModal,
+            handleImageUpload,
+            createCourse,
+        };
+    },
+};
 </script>
+  
+  
+
 <style>
 .button {
     /* appaerance: none; */

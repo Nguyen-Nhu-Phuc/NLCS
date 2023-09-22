@@ -4,7 +4,9 @@
             <div class="col lg-3" v-for="course in courses" :key="course._id">
                 <div class="card">
                     <div class="image">
+                        <!-- Sử dụng course.image để hiển thị hình ảnh từ Cloudinary -->
                         <img class="frame__image" :src="course.image" alt="">
+                        {{ console.log(course.image) }}
                     </div>
                     <div class="content">
                         <a href="#">
@@ -12,11 +14,9 @@
                                 {{ course.name }}
                             </span>
                         </a>
-
                         <p class="desc">
                             {{ course.description }}
                         </p>
-
                         <a class="action" href="#">
                             <router-link :to="{ name: 'editcourse', params: { id: course._id } }" class="item__link">
                                 Chỉnh sửa
@@ -24,23 +24,14 @@
                                     →
                                 </span>
                             </router-link>
-
                         </a>
-
-
                         <a class="actions" href="#">
                             <button type="button" @click="deleteCourse(course._id)" class="button__delete">
                                 Xóa
                             </button>
-
-
                         </a>
-
-
                     </div>
                 </div>
-
-
             </div>
             <div class="col lg-3">
                 <div class="bt_add">
@@ -49,17 +40,15 @@
                             <router-link :to="{ name: 'createcourse' }" class="item__link">
                                 <div class="sign">+</div>
                             </router-link>
-
-                            <!-- <div class="text">Create</div> -->
                         </button>
                     </div>
-
                 </div>
             </div>
-
         </div>
     </div>
 </template>
+
+
 <script>
 import axios from 'axios';
 import { useUserStore } from '../stores/user.js';
@@ -92,13 +81,14 @@ export default {
     methods: {
         async fetchCourses() {
             try {
-                const res = await axios.get(`${this.urlServer}/api/course/stored`); // Thay đổi đường dẫn API của bạn
-                this.courses = res.data; // Gán dữ liệu từ MongoDB vào biến courses
-                console.log(this.courses);
+                const res = await axios.get(`${this.urlServer}/api/course/stored`);
+                this.courses = res.data;
+                console.log(this.courses); // Kiểm tra dữ liệu từ MongoDB
             } catch (error) {
                 console.error('Error get data from MongoDB:', error);
             }
         },
+
 
         async deleteCourse(id) {
             const res = await axios.delete(`http://localhost:3000/api/course/${id}`);
@@ -110,6 +100,8 @@ export default {
     },
 };
 </script>
+
+
 <style lang="scss" scoped>
 @import '../assets/styles/grid.scss';
 

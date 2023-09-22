@@ -1,6 +1,7 @@
 import express, { urlencoded } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import multer from 'multer';
 
 import {connectDB} from './config/db.js';
 
