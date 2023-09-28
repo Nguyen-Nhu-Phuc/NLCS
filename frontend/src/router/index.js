@@ -7,7 +7,8 @@ import Roadmap from '../views/roadmap.vue';
 import Blog from '../views/Blog.vue';
 import CreateCourse from '../views/CreateCourse.vue';
 import EditCourse from '../views/EditCourse.vue';
-
+import CourseVideos from '../views/CourseVideos.vue';
+import PersonalPage from '../views/PersonalPage.vue';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -51,6 +52,16 @@ const router = createRouter({
       name: 'editcourse',
       props: true,
       component: EditCourse
+    },
+    {
+      path: '/coursevideos',
+      name: 'coursevideos',
+      component: CourseVideos
+    },
+    {
+      path: '/personalpage',
+      name: 'personalpage',
+      component: PersonalPage
     },
   ]
 })

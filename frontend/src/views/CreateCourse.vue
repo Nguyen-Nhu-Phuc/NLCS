@@ -61,6 +61,7 @@ export default {
             newCourse.image = '';
         };
 
+
         const handleImageUpload = async (event) => {
             const file = event.target.files[0];
             if (file) {
@@ -91,20 +92,38 @@ export default {
 
         const createCourse = async () => {
             try {
-                // Kiểm tra xem có trường name và description không trống
+                // Kiểm tra xem các trường tên và mô tả không rỗng
                 if (!newCourse.name || !newCourse.description) {
-                    alert("Please fill in all required fields.");
+                    alert("Vui lòng điền đầy đủ thông tin cần thiết.");
                     return;
                 }
 
-                await axios.post(`http://localhost:3000/api/course/createcourse`, newCourse);
+                // Kiểm tra xem quá trình tải ảnh còn đang diễn ra
+                if (!newCourse.image) {
+                    alert("Vui lòng đợi cho đến khi quá trình tải ảnh hoàn thành.");
+                    return;
+                }
+
+                // Bây giờ, bạn có thể tạo khóa học bằng cách sử dụng URL của ảnh
+                const courseData = {
+                    name: newCourse.name,
+                    description: newCourse.description,
+                    image: newCourse.image,
+                };
+
+                // Gửi yêu cầu API để tạo khóa học
+                await axios.post(`http://localhost:3000/api/course/createcourse`, courseData);
+
+                // Sau khi tạo khóa học thành công, bạn có thể làm các công việc khác ở đây
+                // Ví dụ: đóng modal và hiển thị thông báo thành công
                 closeModal();
-                alert("Course created successfully!");
+                alert("Tạo khóa học thành công!");
             } catch (err) {
                 console.error(err);
-                alert("An error occurred while creating the course. Please try again later.");
+                alert("Đã xảy ra lỗi khi tạo khóa học. Vui lòng thử lại sau.");
             }
         };
+
 
         return {
             userStore,

@@ -1,12 +1,13 @@
 <template>
     <div class="frame grid wide">
         <div class="frame__course row">
-            <div class="col lg-3" v-for="course in courses" :key="course._id">
+            <div class="col lg-3" v-for="course in  courses " :key="course._id">
                 <div class="card">
                     <div class="image">
-                        <!-- Sử dụng course.image để hiển thị hình ảnh từ Cloudinary -->
-                        <img class="frame__image" :src="course.image" alt="">
-                        {{ console.log(course.image) }}
+                        <router-link :to="{ name: 'coursevideos' }">
+                            <img class="frame__image" :src="course.image" alt="">
+                            {{ console.log(course.image) }}
+                        </router-link>
                     </div>
                     <div class="content">
                         <a href="#">
@@ -18,7 +19,7 @@
                             {{ course.description }}
                         </p>
                         <a class="action" href="#">
-                            <router-link :to="{ name: 'editcourse', params: { id: course._id } }" class="item__link">
+                            <router-link :to="{ name: 'editcourse', params: { id: course._id } }" class="button__edit">
                                 Chỉnh sửa
                                 <span aria-hidden="true">
                                     →
@@ -36,11 +37,18 @@
             <div class="col lg-3">
                 <div class="bt_add">
                     <div class="main">
-                        <button class="Btn">
+
+                        <button title="Add New" class="button">
+                            <router-link :to="{ name: 'createcourse' }" class="item__link">
+                                <font-awesome-icon :icon="['fas', 'plus']" />
+                            </router-link>
+                        </button>
+
+                        <!-- <button class="Btn">
                             <router-link :to="{ name: 'createcourse' }" class="item__link">
                                 <div class="sign">+</div>
                             </router-link>
-                        </button>
+                        </button> -->
                     </div>
                 </div>
             </div>
@@ -122,9 +130,6 @@ span {
 }
 
 .frame__image {
-    //padding-top: 8px;
-    // max-width: 300px;
-    //max-height: 137px;
     height: 150px;
     width: 280px;
     border-radius: 0.5rem;
@@ -232,19 +237,23 @@ hr {
     transform: translateX(4px);
 }
 
-.actions {
-    height: 30px;
-    display: inline-flex;
-    margin-top: 1rem;
-    color: #ffffff;
+.actions button.button__delete {
+    /* Add the following styles to remove the border */
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    color: #fff;
+    border-radius: 5px;
+    background-color: red;
     font-size: 0.875rem;
-    line-height: 1.25rem;
-    font-weight: 500;
+    // line-height: 1.25rem;
+    // font-weight: 500;
+    height: 30px;
+    width: 40px;
     align-items: center;
     gap: 0.25rem;
-    background-color: red;
-    padding: 4px 8px;
-    border-radius: 4px;
+    padding: 0;
+    /* Remove padding to make it look like a simple link */
 }
 
 .actions span {
@@ -321,5 +330,49 @@ hr {
     width: 70%;
     transition-duration: .3s;
     padding-right: 15px;
+}
+
+.button__edit {
+    color: #fff;
+}
+
+
+.button {
+    border-radius: 50px;
+    border: 3px solid #4bb6b7;
+    margin-top: 45%;
+    margin-left: 45%;
+    position: relative;
+    display: inline-block;
+    padding: 10px;
+    cursor: pointer;
+    transition: transform 0.2s, fill 0.2s;
+}
+
+.button:hover {
+    transform: rotate(90deg);
+}
+
+.button:active {
+    transform: scale(1);
+}
+
+.icon {
+    width: 50px;
+    height: 50px;
+}
+
+.icon path {
+    stroke: slate-200;
+    fill: none;
+    transition: fill 0.2s;
+}
+
+.button:active .icon path {
+    fill: slate-600;
+}
+
+.item__link {
+    color: #4bb6b7;
 }
 </style>
