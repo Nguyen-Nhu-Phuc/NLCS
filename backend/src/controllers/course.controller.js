@@ -58,7 +58,6 @@ const CourseController = {
     // [POST] /api/course/createcourse
     async createCourse(req, res) {
         const { name, description, image} = req.body;
-        // console.log(req.body);
         try {
             const newCourse = new Course({
                 name: name,

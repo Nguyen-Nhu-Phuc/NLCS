@@ -24,7 +24,7 @@
 
       <div class="col col-0 md-7 lg-6">
         <p class="content">
-          &emsp;&emsp;Hi everyone! My name is  Huī Tài Láng. I'm a web developer from Bogor, West
+          &emsp;&emsp;Hi everyone! My name is Huī Tài Láng. I'm a web developer from Bogor, West
           Java. I
           have 1 year of
           experience in back-end web development. I really enjoy what I do right now, in my opinion, creating
@@ -44,118 +44,17 @@
 
   <div class="frame grid wide">
     <div class="frame__course row">
-      <div class="col lg-3">
+      <div class="col lg-3 " v-for="course in  courses " :key="course._id">
         <div class="coure">
           <div class="row">
             <div class="col lg-4">
-              <img class="frame__image" src="../assets/images/html.png" alt="">
+              <img class="frame__image"  :src="course.image">
             </div>
             <div class="col lg-8">
-              <h3>HTML</h3>
-              <p>HyperText Markup Language</p>
+              <h3>{{ course.name }}</h3>
+              <p>{{ course.description }}</p>
             </div>
 
-          </div>
-        </div>
-      </div>
-
-      <div class="col lg-3">
-        <div class="coure">
-          <div class="row">
-            <div class="col lg-4">
-              <img class="frame__image" src="../assets/images/css.png" alt="">
-            </div>
-            <div class="col lg-8">
-              <h3>CSS</h3>
-              <p>Cascading Style Sheets</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col lg-3">
-        <div class="coure">
-          <div class="row">
-            <div class="col lg-4">
-              <img class="frame__image" src="../assets/images/js.jpg" alt="">
-            </div>
-            <div class="col lg-8">
-              <h3>JAVASCRIPT</h3>
-              <p>Cascading Style Sheets</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col lg-3">
-        <div class="coure">
-          <div class="row">
-            <div class="col lg-4">
-              <img class="frame__image" src="../assets/images/vue.png" alt="">
-            </div>
-            <div class="col lg-8">
-              <h3>VUE</h3>
-              <p>Cascading Style Sheets</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="frame__course row">
-      <div class="col lg-3">
-        <div class="coure">
-          <div class="row">
-            <div class="col lg-4">
-              <img class="frame__image" src="../assets/images/re.png" alt="">
-            </div>
-            <div class="col lg-8">
-              <h3>REACT</h3>
-              <p>HyperText Markup Language</p>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <div class="col lg-3">
-        <div class="coure">
-          <div class="row">
-            <div class="col lg-4">
-              <img class="frame__image" src="../assets/images/node.png" alt="">
-            </div>
-            <div class="col lg-8">
-              <h3>NODE JS</h3>
-              <p>Cascading Style Sheets</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col lg-3">
-        <div class="coure">
-          <div class="row">
-            <div class="col lg-4">
-              <img class="frame__image" src="../assets/images/c++.png" alt="">
-            </div>
-            <div class="col lg-8">
-              <h3>C++</h3>
-              <p>Cascading Style Sheets</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col lg-3">
-        <div class="coure">
-          <div class="row">
-            <div class="col lg-4">
-              <img class="frame__image" src="../assets/images/python.png" alt="">
-            </div>
-            <div class="col lg-8">
-              <h3>PYTHON</h3>
-              <p>Cascading Style Sheets</p>
-            </div>
           </div>
         </div>
       </div>
@@ -164,9 +63,55 @@
 </template>
 
 <script>
-export default {
+import axios from 'axios';
+import { useUserStore } from '../stores/user.js';
 
-}
+
+
+export default {
+  setup() {
+    const userStore = useUserStore();
+    return {
+      userStore
+    }
+  },
+
+  data() {
+    return {
+      courses: [], // Mảng chứa dữ liệu khóa học từ MongoDB
+    };
+  },
+  computed: {
+    urlServer() {
+      return import.meta.env.VITE_APP_URL_SERVER;
+    }
+  },
+
+  mounted() {
+    // Gọi phương thức để lấy dữ liệu từ MongoDB khi component được mounted
+    this.fetchCourses();
+  },
+  methods: {
+    async fetchCourses() {
+      try {
+        const res = await axios.get(`${this.urlServer}/api/course/stored`);
+        this.courses = res.data;
+        console.log(this.courses); // Kiểm tra dữ liệu từ MongoDB
+      } catch (error) {
+        console.error('Error get data from MongoDB:', error);
+      }
+    },
+
+
+    async deleteCourse(id) {
+      const res = await axios.delete(`http://localhost:3000/api/course/${id}`);
+      if (res.status == 200) {
+        await this.fetchCourses();
+        this.$router.push('/course');
+      }
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -240,6 +185,7 @@ export default {
   background-color: #121212;
   height: 100px;
   border-radius: 10px;
+  margin-top: 20px;
 }
 
 span {
@@ -253,7 +199,7 @@ span {
 }
 
 .frame__image {
-  padding-top: 15px;
+  padding-top: 33.3%;
   max-width: 100%;
   max-height: 100%;
 }

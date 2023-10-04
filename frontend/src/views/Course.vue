@@ -6,7 +6,6 @@
                     <div class="image">
                         <router-link :to="{ name: 'coursevideos' }">
                             <img class="frame__image" :src="course.image" alt="">
-                            {{ console.log(course.image) }}
                         </router-link>
                     </div>
                     <div class="content">
@@ -43,12 +42,6 @@
                                 <font-awesome-icon :icon="['fas', 'plus']" />
                             </router-link>
                         </button>
-
-                        <!-- <button class="Btn">
-                            <router-link :to="{ name: 'createcourse' }" class="item__link">
-                                <div class="sign">+</div>
-                            </router-link>
-                        </button> -->
                     </div>
                 </div>
             </div>
