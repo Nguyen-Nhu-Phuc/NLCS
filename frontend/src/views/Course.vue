@@ -92,10 +92,18 @@ export default {
 
 
         async deleteCourse(id) {
-            const res = await axios.delete(`http://localhost:3000/api/course/${id}`);
-            if (res.status == 200) {
-                await this.fetchCourses();
-                this.$router.push('/course');
+            const confirmDelete = window.confirm('Are you sure you want to delete this course?');
+
+            if (confirmDelete) {
+                try {
+                    const res = await axios.delete(`${this.urlServer}/api/course/${id}`);
+                    if (res.status === 200) {
+                        await this.fetchCourses();
+                        this.$router.push('/course');
+                    }
+                } catch (error) {
+                    console.error('Error deleting course:', error);
+                }
             }
         },
     },

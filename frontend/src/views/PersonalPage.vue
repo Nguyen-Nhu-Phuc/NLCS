@@ -25,7 +25,7 @@
             </div>
 
 
-            <div class="col lg-7">
+            <div class="col lg-8">
                 <div class="profile__course">
                     <div class="user__course">Các khóa học đã tham gia</div>
                     <div class="row">
@@ -75,13 +75,13 @@ export default {
 }
 
 .profile__user--introduce {
-    border: 2px solid #808990;
+    border: 2px solid #eee;
     border-radius: 5px;
     margin-top: 35px;
 }
 
 .profile__course {
-    border: 2px solid #808990;
+    border: 2px solid #eee;
     border-radius: 5px;
     margin-top: 35px;
 }
@@ -92,7 +92,7 @@ export default {
 }
 
 .user__introduces {
-    font-size: 18px;
+    font-size: 1.22rem;
 
 }
 
@@ -113,6 +113,6 @@ export default {
 }
 
 .notes__course {
-    font-size: 20px;
+    font-size: 1.22rem;
 }
 </style>

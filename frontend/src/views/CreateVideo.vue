@@ -15,7 +15,7 @@
                 </div>
                 <div class="modal__body">
                     <div class="input">
-                        <label class="input__label">Course name</label>
+                        <label class="input__label">Video name</label>
                         <input class="input__field" type="text" id="name" v-model="newCourse.name">
                         <p class="input__description">The title must contain a maximum of 32 characters</p>
                     </div>
@@ -27,7 +27,7 @@
                         </p>
                     </div>
                     <div class="input">
-                        <label class="input__label">Course image</label>
+                        <label class="input__label">Video</label>
                         <input class="input__field" type="file" id="image" ref="imageInput" @change="handleImageUpload">
                         <p class="input__description">Upload an image file (maximum 32 characters)</p>
                     </div>
@@ -67,9 +67,8 @@ export default {
             if (file) {
                 const CLOUD_NAME = "dhquufqkd";
                 const PRESET_NAME = "backgraud_image_courese";
-                const FOLDER_NAME = "VIDEOS";
-                const api = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
-                // const api = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`;
+                const FOLDER_NAME = "ECMA";
+                const api = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`;
                 
 
                 const formData = new FormData();
@@ -114,7 +113,7 @@ export default {
                 };
 
                 // Gửi yêu cầu API để tạo khóa học
-                await axios.post(`http://localhost:3000/api/course/createcourse`, courseData);
+                await axios.post(`http://localhost:3000/api/course/createvideo`, courseData);
 
                 // Sau khi tạo khóa học thành công, bạn có thể làm các công việc khác ở đây
                 // Ví dụ: đóng modal và hiển thị thông báo thành công
