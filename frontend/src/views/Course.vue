@@ -45,6 +45,7 @@
                     </div>
                 </div>
             </div>
+        
         </div>
     </div>
 </template>
@@ -92,20 +93,60 @@ export default {
 
 
         async deleteCourse(id) {
-            const confirmDelete = window.confirm('Are you sure you want to delete this course?');
+            const confirmDelete = window.confirm('Bạn có chắc chắn muốn xóa khóa học này không?');
 
             if (confirmDelete) {
                 try {
+                    // Fetch the course data to get the image URL
+                    const course = this.courses.find(course => course._id === id);
+                    if (!course) {
+                        console.error('Khóa học không tồn tại.');
+                        return;
+                    }
+
+                    // Delete the course from MongoDB
                     const res = await axios.delete(`${this.urlServer}/api/course/${id}`);
+
                     if (res.status === 200) {
+                        // Delete the image from Cloudinary
+                        await this.deleteImageFromCloudinary(course.image);
+
+                        // Fetch the updated list of courses
                         await this.fetchCourses();
                         this.$router.push('/course');
+                        console.log('Khóa học và hình ảnh đã được xóa thành công.');
                     }
                 } catch (error) {
-                    console.error('Error deleting course:', error);
+                    console.error('Lỗi khi xóa khóa học:', error);
                 }
             }
         },
+        async deleteImageFromCloudinary(imageUrl) {
+            try {
+                // Extract the public ID from the Cloudinary image URL
+                const publicId = imageUrl.split('/').pop().replace(/\.\w+$/, '');
+
+                // Construct the Cloudinary API URL for image deletion
+                const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/destroy/${publicId}`;
+
+                // Make a DELETE request to Cloudinary's API to delete the image
+                const cloudinaryResponse = await axios.delete(cloudinaryUrl, {
+                    headers: {
+                        'Authorization': `Bearer ${CLOUDINARY_API_KEY}`,
+                    },
+                });
+
+                if (cloudinaryResponse.status === 200) {
+                    console.log('Hình ảnh đã được xóa khỏi Cloudinary.');
+                } else {
+                    console.error('Không thể xóa hình ảnh từ Cloudinary:', cloudinaryResponse.data);
+                }
+            } catch (error) {
+                console.error('Lỗi khi xóa hình ảnh từ Cloudinary:', error);
+            }
+        }
+
+
     },
 };
 </script>

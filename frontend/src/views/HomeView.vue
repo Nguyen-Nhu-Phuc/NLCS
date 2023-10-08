@@ -48,11 +48,11 @@
         <div class="coure">
           <div class="row">
             <div class="col lg-4">
-              <img class="frame__image"  :src="course.image">
+              <img class="frame__image" :src="course.image">
             </div>
             <div class="col lg-8">
-              <h3>{{ course.name }}</h3>
-              <p>{{ course.description }}</p>
+              <!-- <h3>{{ course.name }}</h3> -->
+              <!-- <p>{{ course.description }}</p> -->
             </div>
 
           </div>
@@ -199,8 +199,11 @@ span {
 }
 
 .frame__image {
-  padding-top: 33.3%;
-  max-width: 100%;
+  border-radius: 10px;
+  height: 110px;
+  // padding-top: 33.3%;
+  // max-width: 100%;
+  width: 282px;
   max-height: 100%;
 }
 

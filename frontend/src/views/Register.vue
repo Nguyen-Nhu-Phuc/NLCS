@@ -67,13 +67,12 @@
 <script>
 
 import axios from 'axios';
-import {useUserStore} from '../stores/user.js';
-
+import { useUserStore } from '../stores/user.js';
 
 export default {
     setup() {
         const userStore = useUserStore();
-        return {userStore};
+        return { userStore };
     },
 
     data() {
@@ -86,6 +85,20 @@ export default {
     },
 
     methods: {
+        handleTransferForm() {
+            const registerButton = document.getElementById("register");
+            const loginButton = document.getElementById("login");
+            const container = document.getElementById("container");
+
+            registerButton.addEventListener("click", () => {
+                container.classList.add("right-panel-active");
+            });
+
+            loginButton.addEventListener("click", () => {
+                container.classList.remove("right-panel-active");
+            });
+        },
+
         async Register() {
             await axios.post(`http://localhost:3000/api/auth/register`, this.user)
                 .then(() => {
@@ -97,8 +110,8 @@ export default {
         },
 
         async Login() {
-            const  res = await axios.post(`http://localhost:3000/api/auth/login`, this.user);
-            if(res.status == 200) {
+            const res = await axios.post(`http://localhost:3000/api/auth/login`, this.user);
+            if (res.status == 200) {
                 this.userStore.account = res.data;
                 this.userStore.accessToken = res.data.accessToken;
                 this.$router.push('/')
@@ -109,12 +122,16 @@ export default {
             }
         },
     },
-    created(){
+    created() {
         console.log(this.userStore.account?.fullName);
+    },
+    async mounted() {
+        this.handleTransferForm()
     }
 }
 </script>
-<style scoped>
+
+<style lang="scss" scoped>
 * {
     box-sizing: border-box;
 }

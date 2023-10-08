@@ -3,16 +3,16 @@
   <main class="main">
     <router-view />
   </main>
-  <!-- <Footer /> -->
+  <Footer />
 </template>
 
 <script>
-import Header from './components/Header.vue';
-// import Footer from './components/Footer.vue';
+import Header from './components/header.vue';
+import Footer from './components/Footer.vue';
 
 
 export default {
-  components: {Header}
+  components: {Header, Footer}
 }
 </script>
 

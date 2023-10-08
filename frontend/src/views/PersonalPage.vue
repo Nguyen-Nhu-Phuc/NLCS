@@ -28,14 +28,13 @@
             <div class="col lg-8">
                 <div class="profile__course">
                     <div class="user__course">Các khóa học đã tham gia</div>
-                    <div class="row">
+                    <div class="row profile__frame" v-for="course in  courses " :key="course._id">
                         <div class="col lg-5">
-                            <img class="image__course" src="../assets/images/jvscn.png" alt="">
+                            <img class="image__course" :src="course.image" alt="">
                         </div>
                         <div class="col lg-7">
-                            <div class="note__course">Lập Trình JavaScript Cơ Bản</div>
-                            <div class="notes__course">Học Javascript cơ bản phù hợp cho người chưa từng học lập trình. Với hơn 100 bài học và có
-                                bài tập thực hành sau mỗi bài học.</div>
+                            <div class="note__course">{{ course.name }}</div>
+                            <div class="notes__course">{{ course.description }}</div>
                         </div>
                     </div>
                 </div>
@@ -44,9 +43,55 @@
     </div>
 </template>
 <script>
-export default {
+import axios from 'axios';
+import { useUserStore } from '../stores/user.js';
 
-}
+
+
+export default {
+    setup() {
+        const userStore = useUserStore();
+        return {
+            userStore
+        }
+    },
+
+    data() {
+        return {
+            courses: [], // Mảng chứa dữ liệu khóa học từ MongoDB
+        };
+    },
+    computed: {
+        urlServer() {
+            return import.meta.env.VITE_APP_URL_SERVER;
+        }
+    },
+
+    mounted() {
+        // Gọi phương thức để lấy dữ liệu từ MongoDB khi component được mounted
+        this.fetchCourses();
+    },
+    methods: {
+        async fetchCourses() {
+            try {
+                const res = await axios.get(`${this.urlServer}/api/course/stored`);
+                this.courses = res.data;
+                console.log(this.courses); // Kiểm tra dữ liệu từ MongoDB
+            } catch (error) {
+                console.error('Error get data from MongoDB:', error);
+            }
+        },
+
+
+        async deleteCourse(id) {
+            const res = await axios.delete(`http://localhost:3000/api/course/${id}`);
+            if (res.status == 200) {
+                await this.fetchCourses();
+                this.$router.push('/course');
+            }
+        },
+    },
+};
 </script>
 <style lang="scss" scoped>
 @import '../assets/styles/grid.scss';
@@ -86,6 +131,10 @@ export default {
     margin-top: 35px;
 }
 
+.profile__frame {
+    margin-top: 12px;
+}
+
 .user__introduce {
     font-size: 20px;
     font-weight: bold;
@@ -99,6 +148,7 @@ export default {
 .image__course {
     max-width: 100%;
     max-height: 100%;
+    border-radius: 10px;
 }
 
 .user__course {
