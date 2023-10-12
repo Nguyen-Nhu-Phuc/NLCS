@@ -11,6 +11,8 @@ import EditCourse from '../views/EditCourse.vue';
 import CourseVideos from '../views/CourseVideos.vue';
 import PersonalPage from '../views/PersonalPage.vue';
 import Lesson from '../views/Lesson.vue';
+import StoreCourse from '../views/StoreCourse.vue';
+import StoreUser from '../views/StoreUser.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -75,6 +77,16 @@ const router = createRouter({
       path: '/lesson',
       name: 'lesson',
       component: Lesson
+    },
+    {
+      path: '/storecourse',
+      name: 'storecourse',
+      component: StoreCourse
+    },
+    {
+      path: '/storeuser',
+      name: 'storeuser',
+      component: StoreUser
     },
   ]
 })

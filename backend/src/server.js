@@ -10,6 +10,7 @@ import authRouter from './routes/auth.route.js';
 import userRouter from './routes/user.route.js';
 import lessonRouter from './routes/lesson.route.js';
 
+
 dotenv.config();
 connectDB();
 
