@@ -67,7 +67,7 @@ export default {
             if (file) {
                 const CLOUD_NAME = "dhquufqkd";
                 const PRESET_NAME = "backgraud_image_courese";
-                const FOLDER_NAME = "VIDEOS";
+                const FOLDER_NAME = "ECMA";
                 const api = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
                 // const api = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`;
                 
@@ -115,9 +115,6 @@ export default {
 
                 // Gửi yêu cầu API để tạo khóa học
                 await axios.post(`http://localhost:3000/api/course/createcourse`, courseData);
-
-                // Sau khi tạo khóa học thành công, bạn có thể làm các công việc khác ở đây
-                // Ví dụ: đóng modal và hiển thị thông báo thành công
                 closeModal();
                 alert("Tạo khóa học thành công!");
             } catch (err) {
@@ -140,9 +137,9 @@ export default {
   
   
 
-<style>
+<style lang="scss" scoped>
 .button {
-    /* appaerance: none; */
+    // appaerance: none; 
     font: inherit;
     border: none;
     background: none;

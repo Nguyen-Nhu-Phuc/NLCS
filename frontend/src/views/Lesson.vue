@@ -3,7 +3,7 @@
         <div class="container" id="container">
             <div class="modal">
                 <div class="modal__header">
-                    <span class="modal__title">New lesson</span>
+                    <span class="modal__title">New Lesson</span>
                     <button class="button button--icon" @click="closeModal">
                         <svg width="24" viewBox="0 0 24 24" height="24" xmlns="http://www.w3.org/2000/svg">
                             <path fill="none" d="M0 0h24v24H0V0z"></path>
@@ -15,7 +15,7 @@
                 </div>
                 <div class="modal__body">
                     <div class="input">
-                        <label class="input__label">Video name</label>
+                        <label class="input__label">name</label>
                         <input class="input__field" type="text" id="name" v-model="newCourse.name">
                         <p class="input__description">The title must contain a maximum of 32 characters</p>
                     </div>
@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <div class="modal__footer">
-                    <button type="submit" class="button button--primary">Create lesson</button>
+                    <button type="submit" class="button button--primary">Create course</button>
                 </div>
             </div>
         </div>
@@ -48,26 +48,27 @@ export default {
     setup() {
         const userStore = useUserStore();
 
-        const newLesson = {
+        const newCourse = {
             name: '',
             description: '',
-            video: '', // Thêm trường image
+            image: '', // Thêm trường image
         };
 
         const closeModal = () => {
-            // Đặt lại các trường trong newLesson và đóng modal
-            newLesson.name = '';
-            newLesson.description = '';
-            newLesson.image = '';
+            // Đặt lại các trường trong newCourse và đóng modal
+            newCourse.name = '';
+            newCourse.description = '';
+            newCourse.image = '';
         };
 
 
-        const handleVideoUpload = async (event) => {
+        const handleImageUpload = async (event) => {
             const file = event.target.files[0];
             if (file) {
                 const CLOUD_NAME = "dhquufqkd";
                 const PRESET_NAME = "backgraud_image_courese";
                 const FOLDER_NAME = "VIDEOS";
+                // const api = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
                 const api = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`;
                 
 
@@ -82,10 +83,10 @@ export default {
                             "Content-Type": "multipart/form-data",
                         },
                     });
-                    newLesson.video = response.data.secure_url;
+                    newCourse.image = response.data.secure_url;
                     console.log(response.data); // Kiểm tra kết quả từ Cloudinary
                 } catch (error) {
-                    console.error("Lỗi khi tải lên video:", error);
+                    console.error("Lỗi khi tải lên hình ảnh:", error);
                 }
 
             }
@@ -94,34 +95,31 @@ export default {
         const createCourse = async () => {
             try {
                 // Kiểm tra xem các trường tên và mô tả không rỗng
-                if (!newLesson.name || !newLesson.description) {
+                if (!newCourse.name || !newCourse.description) {
                     alert("Vui lòng điền đầy đủ thông tin cần thiết.");
                     return;
                 }
 
                 // Kiểm tra xem quá trình tải ảnh còn đang diễn ra
-                if (!newLesson.video) {
+                if (!newCourse.image) {
                     alert("Vui lòng đợi cho đến khi quá trình tải video hoàn thành.");
                     return;
                 }
 
                 // Bây giờ, bạn có thể tạo khóa học bằng cách sử dụng URL của ảnh
-                const lessonData = {
-                    name: newLesson.name,
-                    description: newLesson.description,
-                    video: newLesson.video,
+                const courseData = {
+                    name: newCourse.name,
+                    description: newCourse.description,
+                    image: newCourse.image,
                 };
 
                 // Gửi yêu cầu API để tạo khóa học
-                await axios.post(`http://localhost:3000/api/lesson/createlesson`, lessonData);
-
-                // Sau khi tạo khóa học thành công, bạn có thể làm các công việc khác ở đây
-                // Ví dụ: đóng modal và hiển thị thông báo thành công
+                await axios.post(`http://localhost:3000/api/lesson/createlesson`, courseData);
                 closeModal();
-                alert("Tạo lesson thành công!");
+                alert("Đăng video thành công!");
             } catch (err) {
                 console.error(err);
-                alert("Đã xảy ra lỗi khi tạo lesson. Vui lòng thử lại sau.");
+                alert("Đã xảy ra lỗi khi tải video. Vui lòng thử lại sau.");
             }
         };
 
@@ -139,9 +137,9 @@ export default {
   
   
 
-<style>
+<style lang="scss" scoped>
 .button {
-    /* appaerance: none; */
+    // appaerance: none; 
     font: inherit;
     border: none;
     background: none;

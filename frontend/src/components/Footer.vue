@@ -50,6 +50,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .footer {
+
     display: flex !important;
     left: 0;
     right: 0;

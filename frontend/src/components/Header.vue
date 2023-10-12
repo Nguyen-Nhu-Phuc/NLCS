@@ -88,10 +88,12 @@
                             </svg>
                             Cài đặt
                         </div>
-                        <div class="value" @click="logout">
+                        <router-link v-on:click="logoutUser()" to="/">
+                        <div class="value">
                             <font-awesome-icon :icon="['fas', 'arrow-right-from-bracket']" />
                             Đăng xuất
                         </div>
+                        </router-link>
 
                     </div>
                 </div>
@@ -166,28 +168,20 @@
 <script>
 import axios from 'axios';
 import { useUserStore } from '../stores/user.js';
+
 export default {
     setup() {
         const userStore = useUserStore();
-
         return { userStore };
     },
-
     methods: {
-        async logout() {
-            try {
-                await axios.post('http://localhost:3000/api/logout');
-                this.$store.commit('clearUserData');
-                this.$router.push({ name: '/' }); 
-            } catch (error) {
-                console.error('Lỗi đăng xuất:', error);
-            }
-        },
+        logoutUser() {
+            localStorage.clear();
+            this.$router.push('/register');
+        }
     },
-
-}
+};
 </script>
-
 <style lang="scss" scoped>
 @import '../assets/styles/grid.scss';
 

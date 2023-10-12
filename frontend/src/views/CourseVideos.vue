@@ -6,7 +6,9 @@
             </div>
             <div class="col lg-9">
                 <h1>Xây dựng web với Node JS & Expreess JS</h1>
-                <video src="" :src="course.image"></video>
+                <router-link :to="{ name: 'lesson' }">
+                                    Thêm video
+                                </router-link>
             </div>
         </div>
     </div>
