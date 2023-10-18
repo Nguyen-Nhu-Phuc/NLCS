@@ -7,6 +7,7 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th scope="col">Chọn</th>
                     <th scope="col">#</th>
                     <th scope="col">Tên user</th>
                     <th scope="col">Email</th>
@@ -24,8 +25,8 @@
                     <td>{{ user.email }}</td>
                     <td>{{ user.createdAt }}</td>
                     <td>
-                        <button @click="editUser(user._id)">Chỉnh sửa</button>
-                        <button @click="deleteUser(user._id)">Xóa</button>
+                        <button class="btn__edit" @click="editCourse(course._id)">Chỉnh sửa</button>
+                        <button class="btn__delete" @click="deleteCourse(course._id)">Xóa</button>
                     </td>
                 </tr>
             </tbody>
@@ -39,17 +40,10 @@ import axios from 'axios';
 import { useUserStore } from '../stores/user.js';
 
 export default {
-    setup() {
-        const userStore = useUserStore();
-        return {
-            userStore,
-            selectedUsers: [], // Array to store the selected user IDs
-        };
-    },
-
     data() {
         return {
-            users: [], // Change 'courses' to 'users'
+            users: [],
+            selectedUsers: [],
         };
     },
 
@@ -60,14 +54,14 @@ export default {
     },
 
     mounted() {
-        this.fetchUsers(); // Change to fetch user data
+        this.fetchUsers();
     },
 
     methods: {
         async fetchUsers() {
             try {
-                const res = await axios.get(`${this.urlServer}/api/user/stored`); // Fetch user data
-                this.users = res.data; // Update 'users' with fetched data
+                const res = await axios.get(`${this.urlServer}/api/user`);
+                this.users = res.data;
             } catch (error) {
                 console.error('Error getting data from MongoDB:', error);
             }
@@ -78,15 +72,12 @@ export default {
 
             if (confirmDelete) {
                 try {
-                    // Implement your user deletion logic here
                     const res = await axios.delete(`${this.urlServer}/api/user/${id}`);
 
                     if (res.status === 200) {
-                        // Implement your success logic here
                         await this.fetchUsers();
                         console.log('Người dùng đã được xóa thành công.');
                     } else {
-                        // Implement your error handling logic here
                         console.error('Lỗi khi xóa người dùng:', res);
                     }
                 } catch (error) {
@@ -96,8 +87,6 @@ export default {
         },
 
         async editUser(id) {
-            // Implement your user editing logic here
-            // You can navigate to an edit page or show a modal for editing the user
             console.log('Chỉnh sửa người dùng:', id);
         },
 
@@ -108,20 +97,29 @@ export default {
                 for (const userId of this.selectedUsers) {
                     this.deleteUser(userId);
                 }
-
                 this.selectedUsers = [];
             }
         },
 
         selectAllUsers() {
             if (this.selectedUsers.length === this.users.length) {
-                // Deselect all users if all are currently selected
                 this.selectedUsers = [];
             } else {
-                // Select all users
                 this.selectedUsers = this.users.map((user) => user._id);
             }
         },
     },
 };
 </script>
+
+<style lang="scss" scoped>
+@import '../assets/styles/grid.scss';
+.btn__edit {
+    margin-right: 5px;
+}
+
+.btn__delete {
+    background-color: red;
+    color: white;
+}
+</style>

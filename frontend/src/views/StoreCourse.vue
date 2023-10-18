@@ -7,6 +7,7 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th scope="col">Chọn</th>
                     <th scope="col">#</th>
                     <th scope="col">Tên khóa học</th>
                     <th scope="col">Description</th>
@@ -24,8 +25,8 @@
                     <td>{{ course.description }}</td>
                     <td>{{ course.createdAt }}</td>
                     <td>
-                        <button @click="editCourse(course._id)">Chỉnh sửa</button>
-                        <button @click="deleteCourse(course._id)">Xóa</button>
+                        <button class="btn__edit" @click="editCourse(course._id)">Chỉnh sửa</button>
+                        <button class="btn__delete" @click="deleteCourse(course._id)">Xóa</button>
                     </td>
                 </tr>
             </tbody>
@@ -39,17 +40,10 @@ import axios from 'axios';
 import { useUserStore } from '../stores/user.js';
 
 export default {
-    setup() {
-        const userStore = useUserStore();
-        return {
-            userStore,
-            selectedCourses: [], // Array to store the selected course IDs
-        };
-    },
-
     data() {
         return {
-            courses: [],
+            courses: [], // Array to store the courses
+            selectedCourses: [], // Array to store the selected course IDs
         };
     },
 
@@ -78,15 +72,13 @@ export default {
 
             if (confirmDelete) {
                 try {
-                    // Implement your course deletion logic here
                     const res = await axios.delete(`${this.urlServer}/api/course/${id}`);
 
                     if (res.status === 200) {
-                        // Implement your success logic here
+                        // Course deleted successfully
                         await this.fetchCourses();
                         console.log('Khóa học và hình ảnh đã được xóa thành công.');
                     } else {
-                        // Implement your error handling logic here
                         console.error('Lỗi khi xóa khóa học:', res);
                     }
                 } catch (error) {
@@ -95,9 +87,9 @@ export default {
             }
         },
 
-        async editCourse(id) {
+        editCourse(id) {
             // Implement your course editing logic here
-            // You can navigate to an edit page or show a modal for editing the course
+            // For example, you can navigate to an edit page or display a modal.
             console.log('Chỉnh sửa khóa học:', id);
         },
 
@@ -108,23 +100,29 @@ export default {
                 for (const courseId of this.selectedCourses) {
                     this.deleteCourse(courseId);
                 }
-
                 this.selectedCourses = [];
             }
         },
 
         selectAllCourses() {
             if (this.selectedCourses.length === this.courses.length) {
-                // Deselect all courses if all are currently selected
                 this.selectedCourses = [];
             } else {
-                // Select all courses
                 this.selectedCourses = this.courses.map((course) => course._id);
             }
         },
     },
 };
 </script>
-  
-<style></style>
-  
+
+<style lang="scss" scoped>
+@import '../assets/styles/grid.scss';
+.btn__edit {
+    margin-right: 5px;
+}
+
+.btn__delete {
+    background-color: red;
+    color: white;
+}
+</style>
